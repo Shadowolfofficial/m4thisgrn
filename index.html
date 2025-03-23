@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M4this Grn</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .profile {
+            margin-top: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease-in-out;
+        }
+        .profile img:hover {
+            transform: scale(1.1);
+        }
+        .bio {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out forwards 0.5s;
+        }
+        .social-icons {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 30px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+        .video-container {
+            margin: 20px auto;
+            width: 80%;
+            opacity: 0;
+            animation: fadeInUp 1s ease-in-out forwards 1s;
+        }
+        .plyr {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        .view-counter {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .mute-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(233, 69, 96, 0.3);
+            transition: background 0.3s ease-in-out, transform 0.2s;
+        }
+        .mute-btn:hover {
+            background: #b12a45;
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="profile">
+        <img src="profile.jpg" alt="Photo de profil">
+        <div class="bio">Salut ! Bienvenue sur ma page.</div>
+        <div class="social-icons">
+            <a href="https://www.tiktok.com/@m4this.grn" target="https://www.tiktok.com/@m4this.grn"><i class="fab fa-tiktok"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="https://www.instagram.com/m4thisgrn/" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+    
+    <div class="video-container">
+        <video id="player" class="plyr" controls>
+            <source src="video.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+        <div class="view-counter">Vues : <span id="viewCount">0</span></div>
+    </div>
+    
+    <audio id="background-music" autoplay loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'audio.
+    </audio>
+    
+    <button class="mute-btn" onclick="toggleMute()">🔇 Muet</button>
+    
+    <script>
+        function toggleMute() {
+            var audio = document.getElementById('background-music');
+            audio.muted = !audio.muted;
+        }
+
+        // Initialisation du player Plyr
+        const player = new Plyr('#player');
+        
+        // Compteur de vues avec une API gratuite
+        const API_URL = "https://api.countapi.xyz/hit/mon-site/video";
+
+        async function updateViewCount() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                document.getElementById("viewCount").textContent = data.value;
+            } catch (error) {
+                console.error("Erreur lors de la récupération du compteur de vues", error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", updateViewCount);
+    </script>
+</body>
+</html>
