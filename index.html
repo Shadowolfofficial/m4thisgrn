@@ -6,6 +6,7 @@
     <title>M4this Grn</title>
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         
@@ -22,10 +23,32 @@
             justify-content: center;
             min-height: 100vh;
         }
-        .profile {
-            margin-top: 20px;
-            animation: fadeIn 1.5s ease-in-out;
+
+        /* Écran d'accueil */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            transition: opacity 1s ease-in-out;
+            z-index: 10;
+            cursor: pointer;
         }
+        .overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .profile img {
             width: 150px;
             height: 150px;
@@ -37,13 +60,13 @@
         .profile img:hover {
             transform: scale(1.1);
         }
+
         .bio {
             margin: 10px 0;
             font-size: 18px;
             font-weight: 400;
-            opacity: 0;
-            animation: fadeInUp 1s ease-in-out forwards 0.5s;
         }
+
         .social-icons {
             margin: 15px 0;
             display: flex;
@@ -58,22 +81,23 @@
         .social-icons a:hover {
             transform: scale(1.2);
         }
+
         .video-container {
             margin: 20px auto;
             width: 80%;
-            opacity: 0;
-            animation: fadeInUp 1s ease-in-out forwards 1s;
         }
         .plyr {
             width: 100%;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
-        .view-counter {
+
+        .description {
             margin-top: 10px;
             font-size: 18px;
             font-weight: bold;
         }
+
         .mute-btn {
             position: fixed;
             bottom: 20px;
@@ -92,29 +116,18 @@
             background: #b12a45;
             transform: scale(1.05);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
+    <div class="overlay" id="overlay" onclick="enterSite()">
+        Cliquez n'importe où pour entrer
+    </div>
+    
     <div class="profile">
         <img src="profile.jpg" alt="Photo de profil">
         <div class="bio">Salut ! Bienvenue sur ma page.</div>
         <div class="social-icons">
-            <a href="https://www.tiktok.com/@m4this.grn" target="https://www.tiktok.com/@m4this.grn"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.tiktok.com/@m4this.grn" target="_blank"><i class="fab fa-tiktok"></i></a>
             <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
             <a href="https://www.instagram.com/m4thisgrn/" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
@@ -122,25 +135,27 @@
     
     <div class="video-container">
         <video id="player" class="plyr" controls>
-            <source src="https://www.dropbox.com/s/oxrbxi4b9dwv7yj/AmyCuddy_2012G-480p.mp4?dl=1" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture vidéo.
+            <source src="#" type="video/mp4">
         </video>
-        <div class="view-counter">Vues : <span id="viewCount">0</span></div>
+        <div class="description">Pas encore de video</div>
     </div>
     
-    <audio id="background-music" autoplay loop>
+    <audio id="background-music" loop>
         <source src="https://m4thisgrn.pages.dev/music.mp3" type="audio/mpeg">
-        Votre navigateur ne supporte pas l'audio.
     </audio>
     
     <button class="mute-btn" onclick="toggleMute()">🔇 Muet</button>
     
     <script>
+        function enterSite() {
+            document.getElementById('overlay').classList.add('hidden');
+            startMusic();
+        }
+
         function startMusic() {
-    var audio = document.getElementById('background-music');
-    audio.play();
-    audio.loop = true;  // pour que la musique boucle
-}
+            var audio = document.getElementById('background-music');
+            audio.play().catch(error => console.log("Autoplay bloqué"));
+        }
 
         function toggleMute() {
             var audio = document.getElementById('background-music');
@@ -149,21 +164,6 @@
 
         // Initialisation du player Plyr
         const player = new Plyr('#player');
-        
-        // Compteur de vues avec une API gratuite
-        const API_URL = "https://api.countapi.xyz/hit/m4thisgrn.pages.dev/video";
-
-        async function updateViewCount() {
-            try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                document.getElementById("viewCount").textContent = data.value;
-            } catch (error) {
-                console.error("Erreur lors de la récupération du compteur de vues", error);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", updateViewCount);
     </script>
 </body>
 </html>
