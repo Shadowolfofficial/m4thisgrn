@@ -136,6 +136,12 @@
     <button class="mute-btn" onclick="toggleMute()">🔇 Muet</button>
     
     <script>
+        function startMusic() {
+    var audio = document.getElementById('background-music');
+    audio.play();
+    audio.loop = true;  // pour que la musique boucle
+}
+
         function toggleMute() {
             var audio = document.getElementById('background-music');
             audio.muted = !audio.muted;
